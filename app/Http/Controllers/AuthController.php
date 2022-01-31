@@ -6,31 +6,51 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 
 class AuthController extends Controller
 {
     public function register(Request $request) {
-        $fields = $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
+            // 'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password']),
-        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors'=>$validator->messages(),
+            ]);
+        } else {
 
-        $token = $user->createToken($user->email.'_Token')->plainTextToken;
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+    
+            $token = $user->createToken($user->email.'_Token')->plainTextToken;
+    
+            $response = [
+                'user' => $user,
+                'token' => $token,
+                'message' => 'Registered successfully',
+            ];
+            
+            return response($response, 200);    //everything good
 
-        $response = [
-            'user' => $user,
-            'token' => $token,
-            'message' => 'Registered successfully',
-        ];
-        
-        return response($response, 200);    //everything good
+        }
+
+        // $fields = $request->validate([
+        //     'name' => 'required|string',
+        //     'email' => 'required|string|unique:users,email',
+        //     'password' => 'required|string|min:8',
+        //     // 'password' => 'required|string|min:8|confirmed',
+        // ]);
+
     }
     
     public function login(Request $request) {
