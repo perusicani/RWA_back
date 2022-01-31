@@ -15,7 +15,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
             // 'password' => 'required|string|min:8|confirmed',
         ]);
@@ -37,7 +37,7 @@ class AuthController extends Controller
             $response = [
                 'user' => $user,
                 'token' => $token,
-                'message' => 'Registered successfully',
+                'message' => 'Registered successfully!',
             ];
             
             return response($response, 200);    //everything good
@@ -54,37 +54,54 @@ class AuthController extends Controller
     }
     
     public function login(Request $request) {
-        $fields = $request->validate([     
-            'email' => 'required|string',
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
-        
-        //check email
-        $user = User::where('email', $fields['email'])->first();
-        
-        //check pass
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Bad credentials!'
-            ], 401);
+
+        // $fields = $request->validate([     
+        //     'email' => 'required|string',
+        //     'password' => 'required|string',
+        // ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'validation_errors'=>$validator->messages(),
+            ]);
+        } else {
+            
+            //check email
+            $user = User::where('email', $request->email)->first();
+            
+            //check pass
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response([
+                    'message' => 'Bad credentials!'
+                ], 401);
+            }
+            
+            $token = $user->createToken($user->email.'_Token')->plainTextToken;
+            
+            $response = [
+                'user' => $user,
+                'token' => $token,
+                'message' => 'Logged in successfully!',
+            ];
+            
+            return response($response, 200); 
+
         }
-        
-        $token = $user->createToken($user->email.'_Token')->plainTextToken;
-        
-        $response = [
-            'user' => $user,
-            'token' => $token,
-            'message' => 'Logged in successfully',
-        ];
-        
-        return response($response, 201);    //successfully created code
+
     }
     
     public function logout(Request $request) {
         auth()->user()->tokens()->delete();
-        
-        return [
-            'message' => 'Logged out', 
+
+        $response = [
+            'message' => 'Logged out successfully1',
         ];
+        
+        return response($response, 200); 
     }
 }
