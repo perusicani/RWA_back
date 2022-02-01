@@ -66,9 +66,10 @@ class AuthController extends Controller
         // ]);
 
         if ($validator->fails()) {
-            return response()->json([
+            $response = [
                 'validation_errors'=>$validator->messages(),
-            ]);
+            ];
+            return response($response, 200);
         } else {
             
             //check email
@@ -99,7 +100,7 @@ class AuthController extends Controller
         auth()->user()->tokens()->delete();
 
         $response = [
-            'message' => 'Logged out successfully1',
+            'message' => 'Logged out successfully!',
         ];
         
         return response($response, 200); 
