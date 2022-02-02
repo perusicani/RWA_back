@@ -86,11 +86,12 @@ class AuthController extends Controller
                 // 1 == Admin
                 if($user->role_as == 1) {
                     //abilities admin
+                    $role = 'admin';
                     $token = $user->createToken($user->email.'_AdminToken', ['server:admin'])->plainTextToken;
-
+                    
                 }else {
-
                     //abilities null
+                    $role = null;
                     $token = $user->createToken($user->email.'_Token', [''])->plainTextToken;
                 }
 
@@ -99,6 +100,7 @@ class AuthController extends Controller
                     'user' => $user,
                     'token' => $token,
                     'message' => 'Logged in successfully!',
+                    'role' => $role,
                 ];
                 
                 return response($response, 200); 
