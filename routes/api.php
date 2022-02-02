@@ -24,16 +24,20 @@ Route::post('/login' , [AuthController::class, 'login']);
 //     return $request->user();
 // });
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    // Protected api routes
-    Route::post('/logout' , [AuthController::class, 'logout']);
-
+Route::group(['middleware' => ['auth:sanctum', 'isAPIAdmin']], function () {
+    // Protected admin api routes
+    
     Route::get('/checkingAuthenticated', function() {
         $response= [
             'message' => 'You are in!'
-        ];
-
+        ];  
         return response($response, 200);
     });
+    
+});
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Protected user api routes
+    
+    Route::post('/logout' , [AuthController::class, 'logout']);
 });

@@ -80,18 +80,30 @@ class AuthController extends Controller
                 return response([
                     'message' => 'Bad credentials!'
                 ], 401);
+            } else {
+
+                // if in db role_as is set to 1 give abilities
+                // 1 == Admin
+                if($user->role_as == 1) {
+                    //abilities admin
+                    $token = $user->createToken($user->email.'_AdminToken', ['server:admin'])->plainTextToken;
+
+                }else {
+
+                    //abilities null
+                    $token = $user->createToken($user->email.'_Token', [''])->plainTextToken;
+                }
+
+                
+                $response = [
+                    'user' => $user,
+                    'token' => $token,
+                    'message' => 'Logged in successfully!',
+                ];
+                
+                return response($response, 200); 
             }
             
-            $token = $user->createToken($user->email.'_Token')->plainTextToken;
-            
-            $response = [
-                'user' => $user,
-                'token' => $token,
-                'message' => 'Logged in successfully!',
-            ];
-            
-            return response($response, 200); 
-
         }
 
     }
