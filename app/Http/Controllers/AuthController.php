@@ -25,14 +25,25 @@ class AuthController extends Controller
                 'validation_errors'=>$validator->messages(),
             ]);
         } else {
-
+            
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
     
-            $token = $user->createToken($user->email.'_Token')->plainTextToken;
+            // if in db role_as is set to 1 give abilities
+            // 1 == Admin
+            if($user->role_as == 1) {
+                //abilities admin
+                $role = 'admin';
+                $token = $user->createToken($user->email.'_AdminToken', ['server:admin'])->plainTextToken;
+                
+            }else {
+                //abilities null
+                $role = null;
+                $token = $user->createToken($user->email.'_Token', [''])->plainTextToken;
+            }
     
             $response = [
                 'user' => $user,
