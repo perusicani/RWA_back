@@ -38,7 +38,7 @@ class SkillController extends Controller
         //         "name":"Terapija Update",
         //         "description":"Bog će ti platit v2"
         //     }
-        // }
+        // } 
 
         $validator = Validator::make($request->all(), [
             'skill' => 'required',
