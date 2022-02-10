@@ -9,6 +9,14 @@ use Validator;
 
 class TaskController extends Controller
 {
+    public function id(Request $request) {
+
+        $task = Task::findOrFail($request->id);
+
+        return response()->json(['task' => $task]);
+        
+    }
+
     public function show(Task $task) {
 
         return response()->json(['task' => $task]);
