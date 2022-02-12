@@ -39,8 +39,9 @@ Route::group(['middleware' => ['auth:sanctum', 'isAPIAdmin']], function () {
     });
  
     //admin only
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
+    // Route::get('/users', [UserController::class, 'index']);
+    // Route::get('/users/{user}', [UserController::class, 'show']);
+    // Route::get('/users/{id}', [UserController::class, 'show']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     
     Route::post('/skills/create', [SkillController::class, 'create']);
@@ -56,8 +57,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::post('/logout' , [AuthController::class, 'logout']);
     
-    Route::post('/users', [UserController::class, 'update']);
-    
     //any user
     Route::post('/tasks/create', [TaskController::class, 'create']);
     Route::get('/tasks', [TaskController::class, 'index']);
@@ -72,4 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/checkpoints', [CheckpointController::class, 'update']);
     Route::delete('/checkpoints/{id}', [CheckpointController::class, 'destroy']);
     
+    Route::post('/users', [UserController::class, 'update']);
+    Route::get('/users/{id}', [UserController::class, 'id']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
 });

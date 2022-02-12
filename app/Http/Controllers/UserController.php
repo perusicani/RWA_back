@@ -8,6 +8,15 @@ use Validator;
 
 class UserController extends Controller
 {
+
+    public function id(Request $request) {
+
+        $user = User::findOrFail($request->id);
+
+        return response()->json(['user' => $user]);
+        
+    }
+
     public function show(User $user) {
 
         return response()->json(['user' => $user]);
