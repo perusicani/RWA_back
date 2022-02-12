@@ -16,24 +16,15 @@ class CheckpointController extends Controller
 
     public function index() {
         
-        //http://127.0.0.1:8000/api/checkpoints?page=2
-        $checkpoint = Checkpoint::paginate(10);
+        $checkpoints = Checkpoint::get();
         
         return response()->json([
-            'numberOfPages' => $checkpoint->lastPage(),
-            'checkpoint' => $checkpoint
+            'checkpoints' => $checkpoints
         ]);
 
     }
 
     public function update(Request $request) {
-
-        // $table->longText('description');
-        // $table->boolean('status');  // 0 == incomplete, 1 == complete
-        // $table->unsignedBigInteger('task_id');
-        
-        // 'task_id' => 'required|exists:tasks,id',
-        
 
         $validator = Validator::make($request->all(), [
             'checkpoint' => 'required',
@@ -53,6 +44,7 @@ class CheckpointController extends Controller
         $checkpointToUpdate = Checkpoint::findOrFail($checkpoint->id);
 
         $checkpointToUpdate->description = $checkpoint->description;
+        $checkpointToUpdate->status = $checkpoint->status;
 
         $checkpointToUpdate->save();
 

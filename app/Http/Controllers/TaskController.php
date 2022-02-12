@@ -26,7 +26,9 @@ class TaskController extends Controller
     public function index() {
         
         //http://127.0.0.1:8000/api/tasks?page=2
-        $tasks = Task::paginate(10);
+        // YOOOOOOOOOO OVAKO SE ZOVU ELOQUENT RELATIONSHIPS
+        // https://stackoverflow.com/questions/62127621/retrieving-data-with-foreign-keys-laravel-react
+        $tasks = Task::with('checkpoints')->paginate(10);
         
         return response()->json([
             'numberOfPages' => $tasks->lastPage(),
