@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth:sanctum', 'isAPIAdmin']], function () {
     // Route::get('/users', [UserController::class, 'index']);
     // Route::get('/users/{user}', [UserController::class, 'show']);
     // Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::delete('/users/delete/{id}', [UserController::class, 'destroy']);
     
     Route::post('/skills/create', [SkillController::class, 'create']);
     Route::get('/skills', [SkillController::class, 'index']);

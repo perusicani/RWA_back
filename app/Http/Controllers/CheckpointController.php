@@ -65,8 +65,7 @@ class CheckpointController extends Controller
     public function create(Request $request) {
 
         $validator = Validator::make($request->all(), [
-            'checkpoint' => 'required',
-            'checkpoint.description' => 'required',
+            'checkpoints' => 'required',
             'task_id' => 'required|exists:tasks,id',
         ]);
       
@@ -78,18 +77,24 @@ class CheckpointController extends Controller
             );
         }
 
-        $checkpoint = (object)$request->checkpoint;
+        $checkpoints = (object)$request->checkpoints;
 
         $task_id = $request->task_id;
 
-        $newCheckpoint = Checkpoint::create([
-            'description' => $checkpoint->description,
-            'status' => 0,
-            'task_id' => $task_id,
-        ]);
+        $newCheckpoints = [];
+
+        foreach ($checkpoints as $key => $checkpoint) {
+            $checkpoint = (object)$checkpoint;
+            $newCheckpoint = Checkpoint::create([
+                'description' => $checkpoint->description,
+                'status' => 0,
+                'task_id' => $task_id,
+            ]);
+            $newCheckpoints[$key] = $newCheckpoint;
+        }
 
         return response()->json([
-            'checkpoint' => $newCheckpoint,
+            'checkpoints' => $newCheckpoints,
         ]);
     }
 }
