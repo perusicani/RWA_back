@@ -45,6 +45,7 @@ class CheckpointController extends Controller
 
         $checkpointToUpdate->description = $checkpoint->description;
         $checkpointToUpdate->status = $checkpoint->status;
+        $checkpointToUpdate->claimed_by = $checkpoint->claimed_by;
 
         $checkpointToUpdate->save();
 

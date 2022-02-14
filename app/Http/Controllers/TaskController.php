@@ -11,7 +11,9 @@ class TaskController extends Controller
 {
     public function id(Request $request) {
 
+        // $task = Task::findOrFail($request->id)->with('checkpoints');
         $task = Task::findOrFail($request->id);
+        // $task->checkpoints()->get();
 
         return response()->json(['task' => $task]);
         

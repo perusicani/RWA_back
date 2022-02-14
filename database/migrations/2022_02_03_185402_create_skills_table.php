@@ -17,6 +17,10 @@ class CreateSkillsTable extends Migration
             $table->id();
             $table->string('name');
             $table->longText('description')->nullable();
+            //TODO: ask jospia about this ?? -> ne kužin one skill_user tablice 
+            // (tj zač postoji skill_users, a ne npr checkpoint_task)
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
             $table->timestamps();
         });
     }

@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index() {
         
         //http://127.0.0.1:8000/api/users?page=2
-        $users = User::paginate(10);
+        $users = User::with('tasks')->paginate(10);
         
         return response()->json([
             'numberOfPages' => $users->lastPage(),

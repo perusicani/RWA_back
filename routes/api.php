@@ -63,7 +63,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/tasks/{task}', [TaskController::class, 'show']);
     Route::get('/tasks/{id}', [TaskController::class, 'id']);
     Route::post('/tasks', [TaskController::class, 'update']);
-    Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
+    Route::delete('/tasks/delete/{id}', [TaskController::class, 'destroy']);
     
     Route::post('/checkpoints/create', [CheckpointController::class, 'create']);
     Route::get('/checkpoints', [CheckpointController::class, 'index']);
