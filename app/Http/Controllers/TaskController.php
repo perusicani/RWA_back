@@ -59,6 +59,7 @@ class TaskController extends Controller
 
         $taskToUpdate->title = $task->title;
         $taskToUpdate->description = $task->description;
+        $taskToUpdate->status = $task->status;
 
         $taskToUpdate->save();
 
@@ -112,5 +113,39 @@ class TaskController extends Controller
         return response()->json([
             'task' => $newTask,
         ]);
+    }
+    
+    public function addSkills(Request $request) {
+
+        // {
+        //     "taskId":31,
+        //     "skillIds": [1]
+        // }
+
+        $validator = Validator::make($request->all(), [
+            'taskId' => 'required',
+            'skillIds' => 'required',
+        ]);
+      
+        if($validator->fails()) {
+            return response()->json([
+                    'message' => $validator->errors()
+                ],
+                422
+            );
+        }
+
+        $taskId = $request->taskId;
+        $task = Task::findOrFail($taskId);
+
+        foreach ($request->skillIds as $skillId) {
+            //attach skill
+            $task->skills()->attach($skillId);    
+        }
+
+        return response()->json([
+            'task' => $task,
+        ]);
+
     }
 }

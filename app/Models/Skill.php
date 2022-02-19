@@ -14,11 +14,11 @@ class Skill extends Model
     ];
 
     public function users() {
-        return $this->hasMany('App\Models\User');
+        return $this->belongsToMany('App\Models\User');
     }
 
     public function tasks() {
-        return $this->hasMany('App\Models\Task');
+        return $this->belongsToMany('App\Models\Task');
     }
 
 }

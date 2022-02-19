@@ -22,6 +22,6 @@ class Task extends Model
     }
 
     public function skills() {
-        return $this->hasMany('App\Models\Skill');
+        return $this->belongsToMany('App\Models\Skill');
     }
 }

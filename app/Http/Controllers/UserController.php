@@ -73,4 +73,38 @@ class UserController extends Controller
             'ok'
         ]);
     }
+
+    public function addSkills(Request $request) {
+
+        // {
+        //     "userId":31,
+        //     "skillIds": [1]
+        // }
+
+        $validator = Validator::make($request->all(), [
+            'userId' => 'required',
+            'skillIds' => 'required',
+        ]);
+      
+        if($validator->fails()) {
+            return response()->json([
+                    'message' => $validator->errors()
+                ],
+                422
+            );
+        }
+
+        $userId = $request->userId;
+        $user = User::findOrFail($userId);
+
+        foreach ($request->skillIds as $skillId) {
+            //attach skill
+            $user->skills()->attach($skillId);    
+        }
+
+        return response()->json([
+            'user' => $user,
+        ]);
+
+    }
 }

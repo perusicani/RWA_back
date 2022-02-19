@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/tasks/{id}', [TaskController::class, 'id']);
     Route::post('/tasks', [TaskController::class, 'update']);
     Route::delete('/tasks/delete/{id}', [TaskController::class, 'destroy']);
+    Route::post('/tasks/add-skills', [TaskController::class, 'addSkills']);
     
     Route::post('/checkpoints/create', [CheckpointController::class, 'create']);
     Route::get('/checkpoints', [CheckpointController::class, 'index']);
@@ -76,4 +77,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/users', [UserController::class, 'update']);
     Route::get('/users/{id}', [UserController::class, 'id']);
     Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::post('/users/add-skills', [UserController::class, 'addSkills']);
 });
