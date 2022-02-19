@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth:sanctum', 'isAPIAdmin']], function () {
     });
  
     //admin only
-    // Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users', [UserController::class, 'index']);
     // Route::get('/users/{user}', [UserController::class, 'show']);
     // Route::get('/users/{id}', [UserController::class, 'show']);
     Route::delete('/users/delete/{id}', [UserController::class, 'destroy']);
