@@ -24,11 +24,10 @@ class CheckpointController extends Controller
 
     }
 
-    public function update(Request $request) {
+    public function updateOne(Request $request) {
 
         $validator = Validator::make($request->all(), [
             'checkpoint' => 'required',
-            'checkpoint.description' => 'required',
         ]);
       
         if($validator->fails()) {
@@ -41,16 +40,62 @@ class CheckpointController extends Controller
 
         $checkpoint = (object)$request->checkpoint;
 
-        $checkpointToUpdate = Checkpoint::findOrFail($checkpoint->id);
 
+        $checkpointToUpdate = Checkpoint::findOrFail($checkpoint->id);
+        
+        //update its data
         $checkpointToUpdate->description = $checkpoint->description;
         $checkpointToUpdate->status = $checkpoint->status;
         $checkpointToUpdate->claimed_by = $checkpoint->claimed_by;
-
+        
+        //save it to db
         $checkpointToUpdate->save();
-
+        
         return response()->json([
             'checkpoint' => $checkpointToUpdate,
+        ]);
+    }
+
+    public function update(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'checkpoints' => 'required',
+        ]);
+      
+        if($validator->fails()) {
+            return response()->json([
+                    'message' => $validator->errors()
+                ],
+                422
+            );
+        }
+
+        $checkpoints = (object)$request->checkpoints;
+
+        $checkpointsToUpdate = [];
+
+        // $checkpointToUpdate = Checkpoint::findOrFail($checkpoint->id);
+        
+        foreach ($checkpoints as $key => $checkpoint) {
+            $checkpoint = (object)$checkpoint;
+            
+            //fin the checkpoint by id
+            $checkpointToUpdate = Checkpoint::findOrFail($checkpoint->id);
+            
+            //update its data
+            $checkpointToUpdate->description = $checkpoint->description;
+            $checkpointToUpdate->status = $checkpoint->status;
+            $checkpointToUpdate->claimed_by = $checkpoint->claimed_by;
+            
+            //save it to db
+            $checkpointToUpdate->save();
+
+            //put into array to give as response
+            $checkpointsToUpdate[$key] = $checkpointToUpdate;
+        }
+
+        return response()->json([
+            'checkpoints' => $checkpointsToUpdate,
         ]);
     }
 

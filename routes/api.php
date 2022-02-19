@@ -60,7 +60,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //any user
     Route::post('/tasks/create', [TaskController::class, 'create']);
     Route::get('/tasks', [TaskController::class, 'index']);
-    Route::get('/tasks/{task}', [TaskController::class, 'show']);
+    // WILDCARDS ARE UNSPECIFIED
+    // Route::get('/tasks/{task}', [TaskController::class, 'show']);
     Route::get('/tasks/{id}', [TaskController::class, 'id']);
     Route::post('/tasks', [TaskController::class, 'update']);
     Route::delete('/tasks/delete/{id}', [TaskController::class, 'destroy']);
@@ -68,6 +69,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/checkpoints/create', [CheckpointController::class, 'create']);
     Route::get('/checkpoints', [CheckpointController::class, 'index']);
     Route::get('/checkpoints/{checkpoint}', [CheckpointController::class, 'show']);
+    Route::post('/checkpoint', [CheckpointController::class, 'updateOne']);
     Route::post('/checkpoints', [CheckpointController::class, 'update']);
     Route::delete('/checkpoints/{id}', [CheckpointController::class, 'destroy']);
     
