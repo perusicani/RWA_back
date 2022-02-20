@@ -11,7 +11,7 @@ class TaskController extends Controller
 {
     public function id(Request $request) {
 
-        $task = Task::with('checkpoints')->findOrFail($request->id);
+        $task = Task::with('checkpoints', 'skills')->findOrFail($request->id);
 
         return response()->json(['task' => $task]);
         
@@ -28,7 +28,7 @@ class TaskController extends Controller
         //http://127.0.0.1:8000/api/tasks?page=2
         // YOOOOOOOOOO OVAKO SE ZOVU ELOQUENT RELATIONSHIPS
         // https://stackoverflow.com/questions/62127621/retrieving-data-with-foreign-keys-laravel-react
-        $tasks = Task::with('checkpoints')->paginate(10);
+        $tasks = Task::with('checkpoints', 'skills')->paginate(10);
         
         return response()->json([
             'numberOfPages' => $tasks->lastPage(),
@@ -124,7 +124,6 @@ class TaskController extends Controller
 
         $validator = Validator::make($request->all(), [
             'taskId' => 'required',
-            'skillIds' => 'required',
         ]);
       
         if($validator->fails()) {
@@ -138,13 +137,18 @@ class TaskController extends Controller
         $taskId = $request->taskId;
         $task = Task::findOrFail($taskId);
 
+        //detach previous -> so i don't need to filter in UI
+        $task->skills()->detach();
+
         foreach ($request->skillIds as $skillId) {
             //attach skill
             $task->skills()->attach($skillId);    
         }
 
+
         return response()->json([
             'task' => $task,
+            'skillIds' => $request->skillIds,
         ]);
 
     }

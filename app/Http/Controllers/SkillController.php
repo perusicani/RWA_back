@@ -30,6 +30,16 @@ class SkillController extends Controller
 
     }
 
+    public function allSkills() {
+        
+        $skills = Skill::all();
+        
+        return response()->json([
+            'skills' => $skills
+        ]);
+
+    }
+
     public function update(Request $request) {
 
         // {

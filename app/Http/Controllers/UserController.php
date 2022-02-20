@@ -11,7 +11,7 @@ class UserController extends Controller
 
     public function id(Request $request) {
 
-        $user = User::findOrFail($request->id);
+        $user = User::with('skills')->findOrFail($request->id);
 
         return response()->json(['user' => $user]);
         
@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index() {
         
         //http://127.0.0.1:8000/api/users?page=2
-        $users = User::with('tasks')->paginate(10);
+        $users = User::with('tasks', 'skills')->paginate(10);
         
         return response()->json([
             'numberOfPages' => $users->lastPage(),
@@ -83,7 +83,6 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'userId' => 'required',
-            'skillIds' => 'required',
         ]);
       
         if($validator->fails()) {
@@ -96,6 +95,9 @@ class UserController extends Controller
 
         $userId = $request->userId;
         $user = User::findOrFail($userId);
+
+        //detach previous -> so i don't need to filter in UI
+        $user->skills()->detach();
 
         foreach ($request->skillIds as $skillId) {
             //attach skill
