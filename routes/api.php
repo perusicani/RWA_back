@@ -36,11 +36,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //any user
     
     Route::post('/tasks/create', [TaskController::class, 'create']);
-    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::post('/tasks', [TaskController::class, 'index']);
     // WILDCARDS ARE UNSPECIFIED
     // Route::get('/tasks/{task}', [TaskController::class, 'show']);
     Route::get('/tasks/{id}', [TaskController::class, 'id']);
-    Route::post('/tasks', [TaskController::class, 'update']);
+    Route::post('/tasks/update', [TaskController::class, 'update']);
     Route::delete('/tasks/delete/{id}', [TaskController::class, 'destroy']);
     Route::post('/tasks/add-skills', [TaskController::class, 'addSkills']);
     
